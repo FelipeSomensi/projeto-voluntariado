@@ -1,0 +1,207 @@
+@baseURL = http://localhost:3000
+
+### ===== EVENTOS (públicos) =====
+
+### Listar eventos
+GET {{baseURL}}/events
+
+### Buscar evento por id
+GET {{baseURL}}/events/1
+
+### Evento inexistente (esperado: 404)
+GET {{baseURL}}/events/999
+
+### ===== AUTENTICAÇÃO =====
+
+### Cadastrar novo usuário (esperado: 201)
+
+POST {{baseURL}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "novo@ifrs.edu.br",
+  "password": "senha123"
+}
+
+### Cadastrar o mesmo e-mail de novo (esperado: 409
+
+POST {{baseURL}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "novo@ifrs.edu.br",
+  "password": "senha123"
+}
+
+### Login com senha errada (esperado: 401)
+
+POST {{baseURL}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@ifrs.edu.br",
+  "password": "errada"
+}
+
+### Login como admin (esperado: 200 + token). Copie o valor do campo token da resposta
+POST {{baseURL}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@ifrs.edu.br",
+  "password": "123456"
+}
+
+### Login como usuário comum (esperado: 200 + token). Copie o valor do campo token da resposta
+POST {{baseURL}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "usuario@ifrs.edu.br",
+  "password": "123456"
+}
+
+### ===== DASHBOARD =====
+
+### Dashboard sem token (esperado: 401)
+GET {{baseURL}}/dashboard
+
+### Dashboard com token de usuário comum (esperado: 200)
+### Cole o token do usuario@ifrs.edu.br no lugar de {{COLE_SEU_TOKEN_AQUI}} (sem as chaves)
+GET {{baseURL}}/dashboard
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzdWFyaW9AaWZycy5lZHUuYnIiLCJyb2xlIjoidXNlciIsImlhdCI6MTc5MjM0MDM1MiwiZXhwIjoxNzkyMzQzOTUyfQ.tl3QfC-mqz5tcEoWbi2hSBM_fbuRMWnQrI9ID-o1_v0
+
+### ===== EVENTOS (protegidos) =====
+
+### Criar evento SEM token (esperado: 401)
+POST {{baseURL}}/events
+Content-Type: application/json
+
+{
+  "title": "Teste",
+  "location": "Qualquer",
+  "event_date": "2026-12-20",
+  "max_volunteers": 3
+}
+
+### Criar evento com token de usuário comum (esperado: 403)
+### Use o token do usuario@ifrs.edu.br
+POST {{baseURL}}/events
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkyMzQwMzA5LCJleHAiOjE3OTIzNDM5MDl9.uKqsHlg8mExfKATJ1t36xIhgYTGh6R81pYlkL532UZo
+Content-Type: application/json
+
+{
+  "title": "Teste",
+  "location": "Qualquer",
+  "event_date": "2026-12-20",
+  "max_volunteers": 3
+}
+
+### Criar evento com token de administrador (esperado: 201)
+### Use o token do admin@ifrs.edu.br
+POST {{baseURL}}/events
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkyMzQwNDAzLCJleHAiOjE3OTIzNDQwMDN9.2JcsAbXqYMoSKKDh9KiX6DjJvKWQh6WwSlErx-JP4Qc
+Content-Type: application/json
+
+{
+  "title": "Oficina de Reciclagem",
+  "description": "Aprender a separar e reaproveitar materiais.",
+  "location": "Campus Bento Gonçalves",
+  "event_date": "2026-12-15",
+  "max_volunteers": 6
+}
+
+### Atualizar evento com token de administrador (esperado: 200)
+### Troque o 4 pelo id do evento criado acima e use o token do admin
+PUT {{baseURL}}/events/6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkyMzQwNDAzLCJleHAiOjE3OTIzNDQwMDN9.2JcsAbXqYMoSKKDh9KiX6DjJvKWQh6WwSlErx-JP4Qc
+Content-Type: application/json
+
+{
+  "title": "Oficina de Reciclagem (atualizado)",
+  "description": "Aprender a separar e reaproveitar materiais.",
+  "location": "Campus Bento Gonçalves",
+  "event_date": "2026-12-16",
+  "max_volunteers": 8
+}
+
+### Excluir evento com token de administrador (esperado: 204)
+### Troque o 4 pelo id do evento criado acima e use o token do admin
+DELETE {{baseURL}}/events/6
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkyMzQwNDAzLCJleHAiOjE3OTIzNDQwMDN9.2JcsAbXqYMoSKKDh9KiX6DjJvKWQh6WwSlErx-JP4Qc
+
+
+
+
+### ===== VOLUNTÁRIOS =====
+
+### Listar voluntários (autenticado) (esperado: 200)
+GET {{baseURL}}/volunteers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkyMzQwNDAzLCJleHAiOjE3OTIzNDQwMDN9.2JcsAbXqYMoSKKDh9KiX6DjJvKWQh6WwSlErx-JP4Qc
+
+### Listar voluntários sem token (esperado: 401)
+GET {{baseURL}}/volunteers
+
+### Criar voluntário com token de administrador (esperado: 201)
+POST {{baseURL}}/volunteers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkyMzQwNDAzLCJleHAiOjE3OTIzNDQwMDN9.2JcsAbXqYMoSKKDh9KiX6DjJvKWQh6WwSlErx-JP4Qc
+Content-Type: application/json
+
+{
+  "name": "Felipe Teste",
+  "email": "felipe.teste@email.com",
+  "phone": "(54) 99999-0000"
+}
+
+### Criar voluntário com e-mail repetido (esperado: 409)
+POST {{baseURL}}/volunteers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkyMzQwNDAzLCJleHAiOjE3OTIzNDQwMDN9.2JcsAbXqYMoSKKDh9KiX6DjJvKWQh6WwSlErx-JP4Qc
+Content-Type: application/json
+
+{
+  "name": "Ana Repetida",
+  "email": "ana.souza@email.com"
+}
+
+### ===== INSCRIÇÕES =====
+
+### Listar inscritos do evento 1 (esperado: 200, 3 voluntários)
+GET {{baseURL}}/events/1/volunteers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkyMzQwNDAzLCJleHAiOjE3OTIzNDQwMDN9.2JcsAbXqYMoSKKDh9KiX6DjJvKWQh6WwSlErx-JP4Qc
+
+### Inscrever voluntário 4 no evento 1 (esperado: 201)
+POST {{baseURL}}/events/1/volunteers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkyMzQwNDAzLCJleHAiOjE3OTIzNDQwMDN9.2JcsAbXqYMoSKKDh9KiX6DjJvKWQh6WwSlErx-JP4Qc
+Content-Type: application/json
+
+{
+  "volunteer_id": 4
+}
+
+### Inscrever o mesmo voluntário de novo (esperado: 409)
+POST {{baseURL}}/events/1/volunteers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkyMzQwNDAzLCJleHAiOjE3OTIzNDQwMDN9.2JcsAbXqYMoSKKDh9KiX6DjJvKWQh6WwSlErx-JP4Qc
+Content-Type: application/json
+
+{
+  "volunteer_id": 4
+}
+
+### Inscrever voluntário 5 no evento 1 (esperado: 201, completa o limite de 5)
+POST {{baseURL}}/events/1/volunteers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkyMzQwNDAzLCJleHAiOjE3OTIzNDQwMDN9.2JcsAbXqYMoSKKDh9KiX6DjJvKWQh6WwSlErx-JP4Qc
+Content-Type: application/json
+
+{
+  "volunteer_id": 5
+}
+
+### Inscrever mais um voluntário no evento 1 já lotado (esperado: 400)
+### Crie antes outro voluntário e use o id dele aqui
+POST {{baseURL}}/events/1/volunteers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGlmcnMuZWR1LmJyIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkyMzQwNDAzLCJleHAiOjE3OTIzNDQwMDN9.2JcsAbXqYMoSKKDh9KiX6DjJvKWQh6WwSlErx-JP4Qc
+Content-Type: application/json
+
+{
+  "volunteer_id": 6
+}
