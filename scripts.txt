@@ -1,0 +1,71 @@
+DROP DATABASE IF EXISTS volunteering_ifrs;
+CREATE DATABASE volunteering_ifrs
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE volunteering_ifrs;
+
+-- Users who log in to the system
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  role ENUM('admin', 'user') NOT NULL DEFAULT 'user'
+);
+
+-- Registered volunteers
+CREATE TABLE volunteers (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  phone VARCHAR(20),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Social events
+CREATE TABLE events (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(150) NOT NULL,
+  description TEXT,
+  location VARCHAR(150) NOT NULL,
+  event_date DATE NOT NULL,
+  max_volunteers INT NOT NULL DEFAULT 10,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Volunteer registrations in events (many-to-many)
+CREATE TABLE registrations (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  volunteer_id INT NOT NULL,
+  event_id INT NOT NULL,
+  registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uk_volunteer_event (volunteer_id, event_id),
+  FOREIGN KEY (volunteer_id) REFERENCES volunteers(id) ON DELETE CASCADE,
+  FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+);
+
+-- Sample data
+-- Password for both users: 123456 (plain text for now; we will switch to a hash in the authentication step)
+INSERT INTO users (email, password, role) VALUES
+  ('admin@ifrs.edu.br', '123456', 'admin'),
+  ('usuario@ifrs.edu.br', '123456', 'user');
+
+INSERT INTO volunteers (name, email, phone) VALUES
+  ('Ana Souza', 'ana.souza@email.com', '(54) 99111-1111'),
+  ('Bruno Lima', 'bruno.lima@email.com', '(54) 99222-2222'),
+  ('Carla Mendes', 'carla.mendes@email.com', '(54) 99333-3333'),
+  ('Diego Pereira', 'diego.pereira@email.com', '(54) 99444-4444'),
+  ('Elisa Rocha', 'elisa.rocha@email.com', '(54) 99555-5555');
+
+INSERT INTO events (title, description, location, event_date, max_volunteers) VALUES
+  ('Campanha de Doação de Sangue', 'Apoio à organização e recepção dos doadores.', 'Campus Bento Gonçalves', '2026-11-10', 5),
+  ('Arrecadação de Alimentos', 'Coleta e separação de alimentos não perecíveis.', 'Ginásio Municipal', '2026-11-20', 8),
+  ('Mutirão Ambiental', 'Limpeza e plantio de mudas na margem do rio.', 'Parque da Cidade', '2026-12-05', 10);
+
+INSERT INTO registrations (volunteer_id, event_id) VALUES
+  (1, 1), (2, 1), (3, 1),
+  (1, 2), (4, 2),
+  (5, 3);
+  
+  
+ 

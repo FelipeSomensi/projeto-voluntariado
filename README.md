@@ -75,7 +75,29 @@ O servidor sobe em `http://localhost:3000`.
 
 ### 4. Front-end
 
-[a completar]
+Em outro terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+A aplicação abre em `http://localhost:5173`. O back-end precisa estar rodando na porta 3000.
+
+#### Telas
+
+| Rota | Acesso | Descrição |
+|---|---|---|
+| `/login` | Público | Login com e-mail e senha |
+| `/` | Autenticado | Dashboard |
+| `/events` | Público | Lista de eventos (admin vê criar, editar e excluir) |
+| `/events/:id` | Público | Detalhe do evento e inscritos (admin inscreve voluntários) |
+| `/events/new` e `/events/:id/edit` | Admin | Formulário de evento |
+| `/volunteers` | Autenticado | Lista de voluntários (admin cadastra, edita e exclui) |
+| `/volunteers/new` e `/volunteers/:id/edit` | Admin | Formulário de voluntário |
+
+O token JWT fica no `localStorage` e um interceptor do Axios o envia em toda requisição. Esconder botões para usuários comuns é só recurso visual: a proteção real é feita pelo back-end (401 e 403).
 
 ## Comandos úteis
 
@@ -170,7 +192,3 @@ Content-Type: application/json
 - **Especificação OpenAPI (JSON):** `http://localhost:3000/openapi.json`
 - **Requisições de exemplo:** `backend/tests.rest` (extensão REST Client do VS Code). Para as rotas protegidas, faça o login, copie o token e cole no lugar de `{{COLE_SEU_TOKEN_AQUI}}`.
 - **Código:** documentado com JSDoc nas camadas Model, Service e Controller.
-
-## Limitações conhecidas
-
-- [liste aqui o que não foi implementado, por exemplo: Swagger documenta eventos e autenticação, mas ainda não os endpoints de voluntários e inscrições]

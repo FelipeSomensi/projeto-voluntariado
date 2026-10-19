@@ -88,6 +88,7 @@ function validateEventData({ title, location, event_date, max_volunteers }) {
       'O limite de voluntários deve ser um número inteiro maior que zero',
       400,
     );
+    
   }
 }
 

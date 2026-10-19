@@ -10,10 +10,13 @@ import Login from './pages/Login.jsx';
 import Events from './pages/Events.jsx';
 import EventDetails from './pages/EventDetails.jsx';
 import EventForm from './pages/EventForm.jsx';
+import Volunteers from './pages/Volunteers.jsx';
+import VolunteerForm from './pages/VolunteerForm.jsx';
 import ErrorPage from './pages/ErrorPage.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import { eventLoader } from './loaders/eventLoader.js';
 import { eventEditLoader } from './loaders/eventEditLoader.js';
+import { volunteerEditLoader } from './loaders/volunteerEditLoader.js';
 
 const router = createBrowserRouter([
   {
@@ -57,6 +60,32 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
         loader: eventEditLoader,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: '/volunteers',
+        element: (
+          <ProtectedRoute>
+            <Volunteers />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/volunteers/new',
+        element: (
+          <ProtectedRoute adminOnly>
+            <VolunteerForm />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/volunteers/:id/edit',
+        element: (
+          <ProtectedRoute adminOnly>
+            <VolunteerForm />
+          </ProtectedRoute>
+        ),
+        loader: volunteerEditLoader,
         errorElement: <ErrorPage />,
       },
     ],

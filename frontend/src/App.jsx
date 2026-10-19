@@ -21,6 +21,11 @@ function App() {
           <Link className="nav-link" to="/events">
             Eventos
           </Link>
+          {user && (
+            <Link className="nav-link" to="/volunteers">
+              Voluntários
+            </Link>
+          )}
         </div>
 
         <div className="d-flex align-items-center gap-3 text-white">
