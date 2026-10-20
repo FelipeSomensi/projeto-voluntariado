@@ -45,10 +45,10 @@ CREATE TABLE registrations (
 );
 
 -- Sample data
--- Password for both users: 123456 (plain text for now; we will switch to a hash in the authentication step)
+-- Password for both users: 123456 (stored as a bcrypt hash)
 INSERT INTO users (email, password, role) VALUES
-  ('admin@ifrs.edu.br', '123456', 'admin'),
-  ('usuario@ifrs.edu.br', '123456', 'user');
+  ('admin@ifrs.edu.br', '$2b$10$Hmvv4UOhr8TexPVh3dLfBOLd/K3oGEi6ps9X3eSwvv24tx7dtYlhC', 'admin'),
+  ('usuario@ifrs.edu.br', '$2b$10$Hmvv4UOhr8TexPVh3dLfBOLd/K3oGEi6ps9X3eSwvv24tx7dtYlhC', 'user');
 
 INSERT INTO volunteers (name, email, phone) VALUES
   ('Ana Souza', 'ana.souza@email.com', '(54) 99111-1111'),
@@ -66,6 +66,3 @@ INSERT INTO registrations (volunteer_id, event_id) VALUES
   (1, 1), (2, 1), (3, 1),
   (1, 2), (4, 2),
   (5, 3);
-  
-  
- 

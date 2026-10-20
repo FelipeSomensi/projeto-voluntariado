@@ -192,3 +192,8 @@ Content-Type: application/json
 - **Especificação OpenAPI (JSON):** `http://localhost:3000/openapi.json`
 - **Requisições de exemplo:** `backend/tests.rest` (extensão REST Client do VS Code). Para as rotas protegidas, faça o login, copie o token e cole no lugar de `{{COLE_SEU_TOKEN_AQUI}}`.
 - **Código:** documentado com JSDoc nas camadas Model, Service e Controller.
+
+## Limitações 
+- não foi implementada funcionaldiade para Cancelar inscrição
+- Não foi documentado no Swagger rotas envolvendo volunteers
+- Não é cancelar a inscrição de um voluntario em um evento
